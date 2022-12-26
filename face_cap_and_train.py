@@ -8,7 +8,7 @@ import pandas as pd
 Record = pd.read_csv("data.csv")
 
 # Initialize variables
-face_cascade = cv2.CascadeClassifier('./haar_face.xml')
+face_cascade = cv2.CascadeClassifier('./haarcascade_frontalface_alt.xml')
 DIR = r'C:\Users\Asus\Desktop\BITS Books\CV\project\AttSys\Faces\train'
 PWD = r'C:\Users\Asus\Desktop\BITS Books\CV\project\AttSys'
 
@@ -43,7 +43,7 @@ os.chdir(path)
 # exit(0)
 i=0
 
-while i in range(50):
+while i in range(100):
     # Read a frame from the webcam
     ret, frame = cap.read()
 
@@ -51,7 +51,7 @@ while i in range(50):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Detect faces in the frame
-    detected_faces = face_cascade.detectMultiScale(gray, 1.8, 3)
+    detected_faces = face_cascade.detectMultiScale(gray, 1.5, 3)
 
     # Add the detected faces to the list of faces
     for (x, y, w, h) in detected_faces:
