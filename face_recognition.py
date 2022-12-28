@@ -2,7 +2,10 @@ import cv2
 import os
 import pandas as pd
 import numpy as np
+import imutils
+import requests
 
+url = "http://192.168.116.31:8080/shot.jpg"
 #Import data of students from csv file
 Record = pd.read_csv("data.csv")
 
@@ -25,7 +28,12 @@ l = len(people)+1
 
 while True:
     # Read a frame from the webcam
-    ret, frame = cap.read()
+    # ret, frame = cap.read()
+
+    img_resp = requests.get(url)
+    img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8)
+    img = cv2.imdecode(img_arr, -1)
+    frame = imutils.resize(img, width=1000, height=1800)
 
     # Convert the frame to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

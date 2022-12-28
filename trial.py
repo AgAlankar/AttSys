@@ -1,32 +1,22 @@
+# Import essential libraries
+import requests
 import cv2
 import numpy as np
+import imutils
 
-haar_cascade_f = cv2.CascadeClassifier('C:/Users/Asus/Desktop/BITS Books/CV/project/AttSys/haarcascade_frontalface_alt.xml')
-haar_cascade = cv2.CascadeClassifier('C:/Users/Asus/Desktop/BITS Books/CV/project/AttSys/haar_face.xml')
+# Replace the below URL with your own. Make sure to add "/shot.jpg" at last.
+url = "http://192.168.116.31:8080/shot.jpg"
 
-cap = cv2.VideoCapture(0)
-
+# While loop to continuously fetching data from the Url
 while True:
+	img_resp = requests.get(url)
+	img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8)
+	img = cv2.imdecode(img_arr, -1)
+	img = imutils.resize(img, width=1000, height=1800)
+	cv2.imshow("Android_cam", img)
 
-    ret, frame = cap.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	# Press Esc key to exit
+	if cv2.waitKey(1) == 27:
+		break
 
-    detected_faces_f = haar_cascade_f.detectMultiScale(gray,scaleFactor=1.8,minNeighbors=3)
-    detected_faces = haar_cascade.detectMultiScale(gray,scaleFactor=1.8,minNeighbors=3)
-
-    for (x, y, w, h) in detected_faces_f:
-        cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
-    
-    for (x, y, w, h) in detected_faces:
-        cv2.rectangle(frame, (x,y), (x+w,y+h), (255,0,0), thickness=2)
-
-    cv2.imshow('Webcam', frame)
-
-    # Check for user input
-    key = cv2.waitKey(1)
-    if key == 27: # Press 'ESC' to quit
-        break
-
-# Release the webcam and destroy all windows
-cap.release()
 cv2.destroyAllWindows()
