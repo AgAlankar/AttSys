@@ -1,59 +1,32 @@
-# import os
-
-# # people = os.walk('../random/Faces/train')
-# print(next(os.walk('../random/Faces/train'))[1])
-# people = next(os.walk('../random/Faces/train'))[1]
-# print(people)
-
-#pylint:disable=no-member
-
-import os
-import cv2 as cv
+import cv2
 import numpy as np
 
-# people = ['Ben Afflek', 'Ana de Armas', 'Robert Pattinson']
-people = next(os.walk('../random/Faces/train'))[1]
+haar_cascade_f = cv2.CascadeClassifier('C:/Users/Asus/Desktop/BITS Books/CV/project/AttSys/haarcascade_frontalface_alt.xml')
+haar_cascade = cv2.CascadeClassifier('C:/Users/Asus/Desktop/BITS Books/CV/project/AttSys/haar_face.xml')
 
-DIR = r'.\Faces\train'
+cap = cv2.VideoCapture(0)
 
-haar_cascade = cv.CascadeClassifier('haar_face.xml')
+while True:
 
-features = []
-labels = []
+    ret, frame = cap.read()
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-def create_train():
-    for person in people:
-        path = os.path.join(DIR, person)
-        print(path)
-        label = people.index(person)
+    detected_faces_f = haar_cascade_f.detectMultiScale(gray,scaleFactor=1.8,minNeighbors=3)
+    detected_faces = haar_cascade.detectMultiScale(gray,scaleFactor=1.8,minNeighbors=3)
 
-        for img in os.listdir(path):
-            img_path = os.path.join(path,img)
+    for (x, y, w, h) in detected_faces_f:
+        cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
+    
+    for (x, y, w, h) in detected_faces:
+        cv2.rectangle(frame, (x,y), (x+w,y+h), (255,0,0), thickness=2)
 
-            img_array = cv.imread(img_path)
-            if img_array is None:
-                continue 
-                
-            gray = cv.cvtColor(img_array, cv.COLOR_BGR2GRAY)
+    cv2.imshow('Webcam', frame)
 
-            faces_rect = haar_cascade.detectMultiScale(gray, scaleFactor=1.8, minNeighbors=3)
+    # Check for user input
+    key = cv2.waitKey(1)
+    if key == 27: # Press 'ESC' to quit
+        break
 
-            for (x,y,w,h) in faces_rect:
-                faces_roi = gray[y:y+h, x:x+w]
-                features.append(faces_roi)
-                labels.append(label)
-
-create_train()
-print('Training done ---------------')
-
-features = np.array(features, dtype='object')
-labels = np.array(labels)
-
-face_recognizer = cv.face.LBPHFaceRecognizer_create()
-
-# Train the Recognizer on the features list and the labels list
-face_recognizer.train(features,labels)
-
-face_recognizer.save('face_trained.xml')
-np.save('features.npy', features)
-np.save('labels.npy', labels)
+# Release the webcam and destroy all windows
+cap.release()
+cv2.destroyAllWindows()

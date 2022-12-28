@@ -22,6 +22,7 @@ def create_train():
 
             img_array = cv2.imread(img_path)
             if img_array is None:
+                print(path)
                 continue 
                 
             gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
@@ -39,7 +40,7 @@ print('Training done ---------------')
 features = np.array(features, dtype='object')
 labels = np.array(labels)
 
-face_recognizer = cv2.face.LBPHFaceRecognizer_create(1,8,8,8)
+face_recognizer = cv2.face.LBPHFaceRecognizer_create(1,8,4,4)
 
 # Train the Recognizer on the features list and the labels list
 face_recognizer.train(features,labels)

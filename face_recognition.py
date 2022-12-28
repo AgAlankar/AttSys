@@ -38,7 +38,7 @@ while True:
         label, confidence = face_recognizer.predict(gray[y:y+h, x:x+w])
 
         # Check the confidence level
-        if confidence < 40:
+        if confidence < 8:
             # Display the label and confidence level
             faces_roi = gray[y:y+h,x:x+w]
 
@@ -58,6 +58,7 @@ while True:
             if c > 10:
                 Record.loc[label, 'Present'] = 1
                 c = 0
+                print("-----------------------")
             l = label
         else:
             # If the confidence is high, display 'Unknown'

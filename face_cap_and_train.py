@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 #Import data of students from csv file
-Record = pd.read_csv("data.csv")
+Record = pd.read_csv("./data.csv")
 
 # Initialize variables
 face_cascade = cv2.CascadeClassifier('./haarcascade_frontalface_alt.xml')
@@ -24,9 +24,9 @@ people = np.array(next(os.walk(DIR))[1])
 # print(people)
 
 Registered = np.array(Record['Registered'])
-# label = input('Enter label: ')
+label = input('Enter label: ')
 
-label = 'Alankar'
+# label = 'Alankar'
 valid = np.where(people == label)
 # print(valid[0])
 if(valid[0].size == 0):
@@ -116,8 +116,8 @@ face_recognizer.train(features,labels)
 os.chdir(PWD)
 
 face_recognizer.save('face_trained.xml')
-np.save('features.npy', features)
-np.save('labels.npy', labels)
+# np.save('features.npy', features)
+# np.save('labels.npy', labels)
 
 Record.loc[valid[0], 'Registered'] = 1
 

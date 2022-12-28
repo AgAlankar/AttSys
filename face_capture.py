@@ -24,7 +24,7 @@ os.makedirs(path)
 os.chdir(path)
 i=0
 
-while i in range(50):
+while i in range(200):
     # Read a frame from the webcam
     ret, frame = cap.read()
 
