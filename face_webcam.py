@@ -12,7 +12,7 @@ Record = pd.read_csv("./data.csv")
 url = "http://192.168.116.31:8080/shot.jpg"
 
 # Initialize variables
-face_cascade = cv2.CascadeClassifier('./haarcascade_frontalface_alt.xml')
+face_cascade = cv2.CascadeClassifier('./haar_face.xml')
 DIR = r'C:\Users\Asus\Desktop\BITS Books\CV\project\AttSys\Faces\train'
 PWD = r'C:\Users\Asus\Desktop\BITS Books\CV\project\AttSys'
 
@@ -28,9 +28,9 @@ people = np.array(next(os.walk(DIR))[1])
 # print(people)
 
 Registered = np.array(Record['Registered'])
-# label = input('Enter label: ')
+label = input('Enter Name: ')
 
-label = 'Ishan'
+# label = 'Alankar'
 valid = np.where(people == label)
 # print(valid[0])
 if(valid[0].size == 0):
@@ -75,56 +75,10 @@ while i in range(100):
     # Check for user input
     key = cv2.waitKey(1)
     if key == 27: # Press 'ESC' to quit
-        break
+        exit(0)
 
 # Release the webcam and destroy all windows
 cv2.destroyAllWindows()
-
-# features = []
-# labels = []
-# # people.append(label)
-
-# os.chdir(DIR)
-
-# def create_train():
-#     for person in people:
-#         path = os.path.join(DIR, person)
-#         print(path)
-#         # label = people.index(person)
-#         label = np.where(people == person)
-
-#         for img in os.listdir(path):
-#             img_path = os.path.join(path,img)
-
-#             img_array = cv2.imread(img_path)
-#             if img_array is None:
-#                 continue 
-                
-#             gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
-
-#             faces_rect = face_cascade.detectMultiScale(gray, scaleFactor=1.8, minNeighbors=3)
-
-#             for (x,y,w,h) in faces_rect:
-#                 faces_roi = gray[y:y+h, x:x+w]
-#                 features.append(faces_roi)
-#                 labels.append(label[0])
-
-# create_train()
-# print('Training done ---------------')
-
-# features = np.array(features, dtype='object')
-# labels = np.array(labels)
-
-# face_recognizer = cv2.face.LBPHFaceRecognizer_create()
-
-# # Train the Recognizer on the features list and the labels list
-# face_recognizer.train(features,labels)
-
-# os.chdir(PWD)
-
-# face_recognizer.save('face_trained.xml')
-# # np.save('features.npy', features)
-# # np.save('labels.npy', labels)
 
 Record.loc[valid[0], 'Registered'] = 1
 

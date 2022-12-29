@@ -1,22 +1,35 @@
-# Import essential libraries
-import requests
 import cv2
+import os
 import numpy as np
-import imutils
+import pandas as pd
 
-# Replace the below URL with your own. Make sure to add "/shot.jpg" at last.
-url = "http://192.168.116.31:8080/shot.jpg"
+#Import data of students from csv file
+Record = pd.read_csv("./data.csv")
 
-# While loop to continuously fetching data from the Url
-while True:
-	img_resp = requests.get(url)
-	img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8)
-	img = cv2.imdecode(img_arr, -1)
-	img = imutils.resize(img, width=1000, height=1800)
-	cv2.imshow("Android_cam", img)
+# Initialize variables
+face_cascade = cv2.CascadeClassifier('./haarcascade_frontalface_alt.xml')
+DIR = r'C:\Users\Asus\Desktop\BITS Books\CV\project\AttSys\Faces\train'
+PWD = r'C:\Users\Asus\Desktop\BITS Books\CV\project\AttSys'
 
-	# Press Esc key to exit
-	if cv2.waitKey(1) == 27:
-		break
+#All students who can register must have a folder in Faces/train
+people = np.array(next(os.walk(DIR))[1])        
+# print(people)
 
-cv2.destroyAllWindows()
+Registered = np.array(Record['Registered'])
+# label = input('Enter Name: ')
+
+label = 'Ishan'
+valid = np.where(people == label)
+# print(valid[0])
+if(valid[0].size == 0):
+    print("No such student")
+    exit(0)
+
+if(Registered[valid]):
+    print("Already Registered")
+    exit(0)
+
+Record.loc[valid[0], 'Registered'] = 1
+
+# writing into the file
+Record.to_csv("data.csv", index=False)

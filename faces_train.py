@@ -2,7 +2,6 @@ import os
 import cv2 as cv2
 import numpy as np
 
-# people = ['Ben Afflek', 'Ana de Armas', 'Robert Pattinson']
 DIR = r'.\Faces\train'
 people = next(os.walk(DIR))[1]
 
@@ -22,7 +21,7 @@ def create_train():
 
             img_array = cv2.imread(img_path)
             if img_array is None:
-                print(path)
+                # print(path)
                 continue 
                 
             gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)

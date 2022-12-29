@@ -20,7 +20,7 @@ PWD = r'C:\Users\Asus\Desktop\BITS Books\CV\project\AttSys'
 os.chdir(PWD)
 
 # Initialize the webcam
-cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture(0)
 
 c = 0
 lp = len(people)+1
@@ -48,16 +48,12 @@ while True:
         # Check the confidence level
         if confidence < 8:
             # Display the label and confidence level
-            faces_roi = gray[y:y+h,x:x+w]
-
-            label, confidence = face_recognizer.predict(faces_roi)
             print(f'{c} Label = {people[label]} with a confidence of {confidence}')
 
             cv2.putText(frame, str(people[label]), (20,20), cv2.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
             cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
 
             lp = label
-
             if l == lp:
                 c = c+1
             else:
@@ -68,19 +64,13 @@ while True:
                 c = 0
                 print("-----------------------")
             l = label
+
         else:
             # If the confidence is high, display 'Unknown'
             cv2.putText(frame, 'Unknown', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             print("Unknown")
             c = 0
 
-        # faces_roi = gray[y:y+h,x:x+w]
-
-        # label, confidence = face_recognizer.predict(faces_roi)
-        # print(f'Label = {people[label]} with a confidence of {confidence}')
-
-        # cv2.putText(frame, str(people[label]), (20,20), cv2.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), thickness=2)
-        # cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), thickness=2)
     # Display the frame
     cv2.imshow('Webcam', frame)
 
@@ -90,7 +80,7 @@ while True:
         break
 
 # Release the webcam and destroy all windows
-cap.release()
+# cap.release()
 cv2.destroyAllWindows()
 
 # writing into the file
